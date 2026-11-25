@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>smetanin.seks.minet — Премиум Сервис</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #08080a;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Плавный фон */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at 50% 0%, rgba(255, 0, 128, 0.15) 0%, #08080a 70%);
+            z-index: -2;
+        }
+
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.3;
+            animation: floatBlob 20s infinite alternate ease-in-out;
+        }
+
+        .blob-1 { width: 400px; height: 400px; background: #ff007f; top: -100px; left: -100px; }
+        .blob-2 { width: 500px; height: 500px; background: #7b2cbf; bottom: -150px; right: -150px; animation-duration: 25s; animation-direction: alternate-reverse; }
+
+        @keyframes floatBlob {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, 50px) scale(1.1); }
+            100% { transform: translate(-30px, 80px) scale(0.9); }
+        }
+
+        /* Навигация и бургер */
+        header {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(8, 8, 10, 0.7);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 1px; color: #fff; }
+        .logo span { color: #ff007f; }
+
+        .burger {
+            width: 30px; height: 20px;
+            position: relative;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .burger span {
+            display: block; position: absolute;
+            height: 2px; width: 100%; background: #fff;
+            transition: all 0.3s ease;
+        }
+        .burger span:nth-child(1) { top: 0; }
+        .burger span:nth-child(2) { top: 9px; }
+        .burger span:nth-child(3) { top: 18px; }
+
+        .burger.active span:nth-child(1) { top: 9px; transform: rotate(45deg); }
+        .burger.active span:nth-child(2) { opacity: 0; }
+        .burger.active span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
+
+        /* Выдвижное меню */
+        .mobile-menu {
+            position: fixed;
+            top: 0; right: -100%;
+            width: 100%; height: 100vh;
+            background: rgba(8, 8, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 99;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .mobile-menu.active { right: 0; }
+        .mobile-menu a {
+            color: #fff; text-decoration: none;
+            font-size: 1.5rem; font-weight: 600;
+            margin: 15px 0; transition: color 0.3s;
+        }
+        .mobile-menu a:hover { color: #ff007f; }
+
+        /* Контейнер */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 20px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Анимации */
+        .fade-in {
+            opacity: 0; transform: translateY(30px);
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* Hero */
+        .hero { text-align: center; margin-bottom: 80px; }
+        .hero h1 {
+            font-size: 3.5rem; font-weight: 900; letter-spacing: -1.5px;
+            background: linear-gradient(180deg, #ffffff 0%, #ff007f 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            line-height: 1.1; margin-bottom: 20px;
+        }
+        .hero p { font-size: 1.1rem; color: #a1a1a6; max-width: 600px; margin: 0 auto; }
+
+        /* Секции */
+        section { margin-bottom: 80px; }
+        .section-title { font-size: 2rem; margin-bottom: 30px; text-align: center; color: #fff; }
+
+        /* Карточки */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px; padding: 30px; text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover { 
+            transform: translateY(-5px); 
+            border-color: #ff007f;
+            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.2);
+        }
+        
+        /* Картинки в карточках */
+        .card-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card h3 { font-size: 1.2rem; margin-bottom: 10px; }
+        .card .price { font-size: 2.5rem; font-weight: 700; margin: 15px 0; color: #ff007f; }
+        .card p { font-size: 0.9rem; color: #888; margin-bottom: 20px; min-height: 40px;}
+
+        /* Бейдж скидки */
+        .discount-badge {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: #ff007f;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transform: rotate(15deg);
+            box-shadow: 0 5px 15px rgba(255,0,127,0.4);
+            z-index: 10;
+        }
+
+        /* Кнопка */
+        .btn {
+            display: inline-block; padding: 14px 30px;
+            background: #ff007f; color: #fff; text-decoration: none;
+            border-radius: 30px; font-weight: 600; transition: all 0.3s;
+            border: none; cursor: pointer; width: 100%;
+        }
+        .btn:hover { background: #d10068; box-shadow: 0 10px 20px rgba(255, 0, 127, 0.4); }
+        .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); width: auto;}
+        .btn-outline:hover { border-color: #ff007f; background: rgba(255, 0, 127, 0.1); }
+
+        /* Футер */
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid rgba(255,255,255,0.05); color: #666; }
+        footer a { color: #ff007f; text-decoration: none; }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            header { padding: 15px 20px; }
+            .container { padding-top: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <header>
+        <div class="logo">SMETANIN<span>.</span>SEKS</div>
+        <div class="burger" id="burger">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#services">Прайс-лист</a>
+        <a href="#mom">Услуги бабки</a>
+        <a href="https://t.me/hilllllpi" target="_blank">Связаться</a>
+    </div>
+
+    <div class="container">
+        
+        <!-- Hero -->
+        <div class="hero fade-in">
+            <h1>Сергей Сметанин<br>Премиум Услуги</h1>
+            <p>Сергей Сметанин приедет на дом и окажет любую услугу на ваш вкус и цвет. Быстро, качественно, с душой. Специальные предложения и скидки.</p>
+        </div>
+
+        <!-- Прайс -->
+        <section id="services" class="fade-in delay-1">
+            <h2 class="section-title">Прайс-лист</h2>
+            <div class="grid">
+                
+                <!-- Минет -->
+                <div class="card">
+                    <!-- ТВОЕ 3 ФОТО -->
+                    <img src="https://i.ibb.co/6P0Z5Z9/photo-3.jpg" alt="Сергей" class="card-img" onerror="this.src='https://via.placeholder.com/300x250?text=Photo+3'">
+                    <h3>Минет</h3>
+                    <div class="price">500 ₽</div>
+                    <p>Классический вариант. Быстро, качественно, без лишних вопросов.</p>
+                    <a href="https://t.me/hilllllpi" class="btn" target="_blank">Заказать</a>
+                </div>
+
+                <!-- Глубокий минет по скидке -->
+                <div class="card">
+                    <div class="discount-badge">СКИДКА</div>
+                    <!-- ТВОЕ 2 ФОТО -->
+                    <img src="https://i.ibb.co/3s7bX4h/photo-2.jpg" alt="Сергей Скидка" class="card-img" onerror="this.src='https://via.placeholder.com/300x250?text=Photo+2'">
+                    <h3>Глубокий Минет</h3>
+                    <div class="price" style="text-decoration: line-through; font-size: 1.5rem; color: #666; margin-bottom: 0;">500 ₽</div>
+                    <div class="price">99 ₽</div>
+                    <p>Эксклюзивное предложение по акции. Ограниченное количество мест!</p>
+                    <a href="https://t.me/hilllllpi" class="btn" target="_blank">Заказать по скидке</a>
+                </div>
+
+                <!-- Дающий в жопу -->
+                <div class="card">
+                    <div class="discount-badge">СКИДКА</div>
+                    <!-- ТВОЕ 1 ФОТО -->
+                    <img src="https://i.ibb.co/9q6tY4V/photo-1.jpg" alt="Сергей Жопа" class="card-img" onerror="this.src='https://via.placeholder.com/300x250?text=Photo+1'">
+                    <h3>Дающий в Жопу Сергей</h3>
+                    <div class="price" style="text-decoration: line-through; font-size: 1.5rem; color: #666; margin-bottom: 0;">1000 ₽</div>
+                    <div class="price">499 ₽</div>
+                    <p>Специальная цена по скидке. Полный контакт, без ограничений.</p>
+                    <a href="https://t.me/hilllllpi" class="btn" target="_blank">Заказать по скидке</a>
+                </div>
+
+                <!-- Отпиздить -->
+                <div class="card">
+                    <h3 style="margin-top: 50px;">Отпиздить Сергея</h3>
+                    <div class="price" style="color: #00ff00;">Бесплатно</div>
+                    <p>Только 3 дня! Успейте оторваться на полную катушку.</p>
+                    <a href="https://t.me/hilllllpi" class="btn" style="background: transparent; border: 1px solid #00ff00; color: #00ff00;" target="_blank">Записаться</a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Услуги бабки -->
+        <section id="mom" class="fade-in delay-2">
+            <h2 class="section-title">Специальный Подарок</h2>
+            <div class="grid">
+                <div class="card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto; width: 100%;">
+                    <h3>Мамаша Сергея Сметанина</h3>
+                    <p style="font-size: 1.1rem; color: #fff;">Идет в подарок к любому заказу! На растерзание.</p>
+                    <div class="price" style="font-size: 1.5rem; color: #ff007f;">Статус: <span style="color:#ff0000; font-weight: 900;">СДОХЛА</span></div>
+                    <a href="https://t.me/hilllllpi" class="btn" target="_blank">Узнать подробности</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Связь -->
+        <section class="fade-in delay-3" style="text-align: center;">
+            <h2 class="section-title">Бронирование</h2>
+            <p style="color: #a1a1a6; margin-bottom: 20px;">Все вопросы и заказы строго через Telegram.</p>
+            <a href="https://t.me/hilllllpi" class="btn" style="font-size: 1.1rem; padding: 18px 40px; max-width: 300px; margin: 0 auto;">Написать @hilllllpi</a>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>© 2026 SMETANIN.SEKS. Все права защищены.</p>
+    </footer>
+
+    <script>
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuLinks = mobileMenu.querySelectorAll('a');
+
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                burger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
